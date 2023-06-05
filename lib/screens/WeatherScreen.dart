@@ -50,7 +50,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
   List<Day>? refinedList;
   getWeather() async {
-    fullWeather = await WeatherService.getWeather(days: 80);
+    fullWeather = await WeatherService.getWeather(
+        days: 80, lat: position!.latitude, lon: position!.longitude);
     int dateCount = DateTime.now().day;
     refinedList = fullWeather!.list.where((element) {
       var date = DateTime.fromMillisecondsSinceEpoch(element.dt * 1000);
@@ -92,7 +93,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
           Container(
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: (DateTime.now().hour < 17)
+                      image: (DateTime.now().hour > 17)
                           ? const AssetImage("assets/night.jpeg")
                           : const AssetImage("assets/sunny.jpg"),
                       fit: BoxFit.cover))),
