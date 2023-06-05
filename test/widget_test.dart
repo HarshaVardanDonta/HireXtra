@@ -1,30 +1,59 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+// ignore_for_file: unused_local_variable
+
+import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/model/FullWeather.dart';
+import 'package:flutter_application_1/network/WeatherService.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:flutter_application_1/main.dart';
+import 'package:geolocator/geolocator.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  bool locationChecked = false;
+  bool isLocationEnabled = false;
+  LocationPermission? permission;
+  Position? position;
+  FullWeather? fullWeather;
+  bool gotWeather = false;
+  WidgetsFlutterBinding.ensureInitialized();
+  checkLocation() async {
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        isLocationEnabled = false;
+        locationChecked = false;
+      } else {
+        position = await Geolocator.getCurrentPosition();
+        isLocationEnabled = true;
+        locationChecked = true;
+      }
+    } else {
+      position = await Geolocator.getCurrentPosition();
+      isLocationEnabled = true;
+      locationChecked = true;
+    }
+  }
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+  List<double> latLon = [];
+  List<double> getLatLon() {
+    latLon.add(Random().nextDouble() * 70);
+    latLon.add(Random().nextDouble() * 70);
+    return latLon;
+  }
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+  group('weather test', () {
+    test('get weather', () async {
+      expect(
+          await WeatherService.getWeather(
+              days: 40,
+              lat: Random().nextDouble() * 70,
+              lon: Random().nextDouble() * 70),
+          isNotNull);
+    });
+    test('get user location', () {
+      expect(checkLocation(), isNotNull);
+    });
   });
 }

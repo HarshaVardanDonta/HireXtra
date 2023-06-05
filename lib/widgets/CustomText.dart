@@ -22,6 +22,17 @@ class CustomText extends StatefulWidget {
 }
 
 class _CustomTextState extends State<CustomText> {
+  DateTime date = DateTime.now();
+  getColor() {
+    bool isDay = date.hour > 6 && date.hour < 17 ? true : false;
+
+    if (widget.color != null) {
+      return widget.color;
+    } else {
+      return isDay ? Colors.black : Colors.white;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Text(widget.text,
@@ -29,18 +40,18 @@ class _CustomTextState extends State<CustomText> {
             shadows: [
               (widget.isShadow ?? false)
                   ? const Shadow(
-                      blurRadius: 10.0, // shadow blur
-                      color: Colors.black, // shadow color
-                      offset: Offset(0.0, 2.0), // how much shadow will be shown
+                      blurRadius: 10.0,
+                      color: Colors.purple,
+                      offset: Offset(0.0, 2.0),
                     )
                   : const Shadow(
-                      blurRadius: 0.0, // shadow blur
-                      color: Colors.transparent, // shadow color
-                      offset: Offset(0.0, 0.0), // how much shadow will be shown
+                      blurRadius: 0.0,
+                      color: Colors.transparent,
+                      offset: Offset(0.0, 0.0),
                     )
             ],
             fontSize: widget.size ?? 20,
-            color: widget.color ?? Colors.black,
+            color: getColor(),
             fontWeight: widget.weight ?? FontWeight.normal));
   }
 }

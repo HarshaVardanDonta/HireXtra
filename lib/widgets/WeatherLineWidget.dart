@@ -27,21 +27,36 @@ class _WeatherLineWidgetState extends State<WeatherLineWidget> {
     }
   }
 
+  DateTime date = DateTime.now();
+  getColor() {
+    bool isDay = date.hour > 6 && date.hour < 17 ? true : false;
+
+    return isDay ? Colors.black : Colors.white;
+  }
+
   getIcon() {
     if (widget.day.weather[0].main == "Clouds") {
-      return const FaIcon(
+      return FaIcon(
         FontAwesomeIcons.cloud,
+        color: getColor(),
         size: 15,
       );
     } else if (widget.day.weather[0].main == "Rain") {
-      return const FaIcon(
+      return FaIcon(
         FontAwesomeIcons.cloudRain,
+        color: getColor(),
         size: 20,
       );
     } else if (widget.day.weather[0].main == "Clear") {
-      return const Icon(Icons.wb_sunny_outlined);
+      return Icon(
+        Icons.wb_sunny_outlined,
+        color: getColor(),
+      );
     } else {
-      return const Icon(Icons.wb_sunny_outlined);
+      return Icon(
+        Icons.wb_sunny_outlined,
+        color: getColor(),
+      );
     }
   }
 
@@ -55,6 +70,7 @@ class _WeatherLineWidgetState extends State<WeatherLineWidget> {
           Flexible(
             flex: 1,
             child: CustomText(
+              isShadow: true,
               text: milliSecondTodate().toString(),
               weight: FontWeight.bold,
               size: 15,
@@ -69,17 +85,38 @@ class _WeatherLineWidgetState extends State<WeatherLineWidget> {
                 CustomText(
                   text: "${widget.day.main.temp_min}°",
                   size: 15,
+                  isShadow: true,
                 ),
-                const SizedBox(
+                SizedBox(
                   width: 110,
-                  child: LinearProgressIndicator(
-                    value: 0.2,
-                    color: Colors.amber,
-                    backgroundColor: Colors.white,
+                  child: SliderTheme(
+                    data: const SliderThemeData(
+                      trackHeight: 2,
+                      activeTrackColor: Colors.amber,
+                      inactiveTrackColor: Colors.white,
+                      rangeThumbShape: RoundRangeSliderThumbShape(
+                        enabledThumbRadius: 2.0,
+                      ),
+                    ),
+                    child: RangeSlider(
+                      min: widget.day.main.temp_min,
+                      max: widget.day.main.temp_max,
+                      values: RangeValues(
+                          widget.day.main.temp_min, widget.day.main.temp_max),
+                      onChanged: (val) {},
+                    ),
                   ),
+                  // child: LinearProgressIndicator(
+                  //   value: 0.2,
+                  //   color: Colors.amber,
+                  //   backgroundColor: Colors.white,
+                  // ),
                 ),
                 CustomText(
-                    text: widget.day.main.temp_max.toString() + "°", size: 15),
+                  text: widget.day.main.temp_max.toString() + "°",
+                  size: 15,
+                  isShadow: true,
+                ),
               ],
             ),
           ),

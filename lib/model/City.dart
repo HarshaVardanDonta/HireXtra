@@ -24,8 +24,8 @@ class City {
       country: json['country'],
       population: json['population'],
       timezone: json['timezone'],
-      lat: json['coord']['lat'],
-      lon: json['coord']['lon'],
+      lat: double.parse(json['coord']['lat'].toString()),
+      lon: double.parse(json['coord']['lon'].toString()),
     );
   }
 

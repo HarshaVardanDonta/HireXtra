@@ -5,6 +5,7 @@ import 'package:flutter_application_1/model/Day.dart';
 import 'package:flutter_application_1/model/FullWeather.dart';
 import 'package:flutter_application_1/widgets/CustomText.dart';
 import 'package:flutter_application_1/widgets/WeatherLineWidget.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 
 import '../network/WeatherService.dart';
@@ -72,6 +73,13 @@ class _WeatherScreenState extends State<WeatherScreen> {
     });
   }
 
+  DateTime date = DateTime.now();
+  getColor() {
+    bool isDay = date.hour > 6 && date.hour < 17 ? true : false;
+
+    return isDay ? Colors.black : Colors.white;
+  }
+
   @override
   Widget build(BuildContext context) {
     if (!locationChecked) {
@@ -97,9 +105,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
           Container(
               decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: (DateTime.now().hour > 17)
-                          ? const AssetImage("assets/night.jpeg")
-                          : const AssetImage("assets/sunny.jpg"),
+                      image:
+                          (DateTime.now().hour > 6 && DateTime.now().hour < 17)
+                              ? const AssetImage("assets/sunny.jpg")
+                              : const AssetImage("assets/night.jpeg"),
                       fit: BoxFit.cover))),
           SafeArea(
             child: Padding(
@@ -110,26 +119,22 @@ class _WeatherScreenState extends State<WeatherScreen> {
                   CustomText(
                     text: fullWeather!.city.name,
                     size: 30,
-                    color: Colors.white,
                     weight: FontWeight.bold,
                     isShadow: true,
                   ),
                   CustomText(
                     text: "${fullWeather!.list[0].main.temp}°",
                     size: 80,
-                    color: Colors.white,
                     isShadow: true,
                   ),
                   CustomText(
                     text: fullWeather!.list[0].weather[0].description,
-                    color: Colors.white,
                     isShadow: true,
                     weight: FontWeight.bold,
                   ),
                   CustomText(
                     text:
-                        "${fullWeather!.list[0].main.temp_max}°  L- ${fullWeather!.list[0].main.temp_min}°",
-                    color: Colors.white,
+                        "H- ${fullWeather!.list[0].main.temp_max}°  L- ${fullWeather!.list[0].main.temp_min}°",
                     isShadow: true,
                     weight: FontWeight.bold,
                   ),
@@ -154,9 +159,10 @@ class _WeatherScreenState extends State<WeatherScreen> {
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
-                                const Icon(
-                                  Icons.calendar_today_outlined,
-                                  size: 20,
+                                FaIcon(
+                                  FontAwesomeIcons.calendarDays,
+                                  color: getColor(),
+                                  size: 15,
                                 ),
                                 const SizedBox(
                                   width: 10,
@@ -164,6 +170,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                 CustomText(
                                   text: "5 - Days Forecast",
                                   size: 15,
+                                  isShadow: true,
                                 ),
                               ],
                             ),
