@@ -25,22 +25,26 @@ class _WeatherScreenState extends State<WeatherScreen> {
   bool gotWeather = false;
 
   checkLocation() async {
-    position = await Geolocator.getCurrentPosition();
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
         setState(() {
           isLocationEnabled = false;
           locationChecked = false;
         });
       } else {
+        position = await Geolocator.getCurrentPosition();
+
         setState(() {
           isLocationEnabled = true;
           locationChecked = true;
         });
       }
     } else {
+      position = await Geolocator.getCurrentPosition();
+
       setState(() {
         isLocationEnabled = true;
         locationChecked = true;
