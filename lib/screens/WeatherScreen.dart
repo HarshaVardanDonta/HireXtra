@@ -56,7 +56,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
   List<Day>? refinedList;
   getWeather() async {
     fullWeather = await WeatherService.getWeather(
-        days: 80, lat: position!.latitude, lon: position!.longitude);
+        days: 30, lat: position!.latitude, lon: position!.longitude);
     int dateCount = DateTime.now().day;
     refinedList = fullWeather!.list.where((element) {
       var date = DateTime.fromMillisecondsSinceEpoch(element.dt * 1000);

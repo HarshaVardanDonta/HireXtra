@@ -87,8 +87,7 @@ class _WeatherLineWidgetState extends State<WeatherLineWidget> {
                   size: 15,
                   isShadow: true,
                 ),
-                SizedBox(
-                  width: 110,
+                Expanded(
                   child: SliderTheme(
                     data: const SliderThemeData(
                       trackHeight: 2,
